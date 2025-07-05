@@ -50,6 +50,41 @@
             display: inline-block;
         }
 
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+
+        .lang-btn.active {
+            background: rgba(255,255,255,0.8);
+            color: #333;
+        }
+
         .calculator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -314,11 +349,17 @@
     </style>
 </head>
 <body>
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="ru">🇷🇺 RU</button>
+        <button class="lang-btn" data-lang="en">🇺🇸 EN</button>
+        <button class="lang-btn" data-lang="bg">🇧🇬 BG</button>
+    </div>
+    
     <div class="container">
         <div class="header">
-            <h1>🔮 Калькулятор Камней</h1>
-            <p>Рассчитайте стоимость и характеристики ваших камней с учетом бонусов</p>
-            <div class="version-badge">✨ Расширенная версия - с бонусами и слотами</div>
+            <h1 data-translate="title">🔮 Калькулятор Камней</h1>
+            <p data-translate="subtitle">Рассчитайте стоимость и характеристики ваших камней с учетом бонусов</p>
+            <div class="version-badge" data-translate="version">✨ Расширенная версия - с бонусами и слотами</div>
             
             <div class="stone-icons">
                 <div class="stone-icon fire">🔥</div>
@@ -331,93 +372,301 @@
         <div class="calculator-grid">
             <!-- Расчет по количеству камней -->
             <div class="calculator-card">
-                <h2 class="card-title">📊 Расчет по количеству камней</h2>
+                <h2 class="card-title" data-translate="calc_by_stones">📊 Расчет по количеству камней</h2>
                 <form id="stones-form">
                     <div class="form-group">
-                        <label for="stone-type-1">Тип камня:</label>
+                        <label for="stone-type-1" data-translate="stone_type">Тип камня:</label>
                         <select id="stone-type-1" class="stone-type-select" required>
-                            <option value="">Выберите тип камня</option>
-                            <option value="Fire">🔥 Fire (Атака)</option>
-                            <option value="Water">💧 Water (Здоровье)</option>
-                            <option value="Ice">❄️ Ice (Атака)</option>
-                            <option value="Wind">💨 Wind (Защита)</option>
+                            <option value="" data-translate="select_stone">Выберите тип камня</option>
+                            <option value="Fire" data-translate-prefix="fire_option">🔥 Fire (Атака)</option>
+                            <option value="Water" data-translate-prefix="water_option">💧 Water (Здоровье)</option>
+                            <option value="Ice" data-translate-prefix="ice_option">❄️ Ice (Атака)</option>
+                            <option value="Wind" data-translate-prefix="wind_option">💨 Wind (Защита)</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label for="base-stones">Количество базовых камней (1 уровень):</label>
-                        <input type="number" id="base-stones" min="0" step="1" placeholder="Введите количество" required>
+                        <label for="base-stones" data-translate="base_stones_count">Количество базовых камней (1 уровень):</label>
+                        <input type="number" id="base-stones" min="0" step="1" data-translate-placeholder="enter_count" placeholder="Введите количество" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="price-per-stone-1">Цена за камень:</label>
-                        <input type="number" id="price-per-stone-1" min="0" step="0.01" placeholder="Введите цену" required>
+                        <label for="price-per-stone-1" data-translate="price_per_stone">Цена за камень:</label>
+                        <input type="number" id="price-per-stone-1" min="0" step="0.01" data-translate-placeholder="enter_price" placeholder="Введите цену" required>
                     </div>
 
                     <div class="slot-config">
                         <div class="form-group">
-                            <label for="equipment-slots-1">Количество предметов:</label>
+                            <label for="equipment-slots-1" data-translate="equipment_count">Количество предметов:</label>
                             <input type="number" id="equipment-slots-1" min="1" max="7" value="6" placeholder="6-7">
                         </div>
                         <div class="form-group">
-                            <label for="stones-per-item-1">Камней на предмет:</label>
+                            <label for="stones-per-item-1" data-translate="stones_per_item">Камней на предмет:</label>
                             <input type="number" id="stones-per-item-1" min="1" max="3" value="3" placeholder="1-3">
                         </div>
                     </div>
                     
-                    <button type="submit" class="calculate-btn">🧮 Рассчитать</button>
+                    <button type="submit" class="calculate-btn" data-translate="calculate_btn">🧮 Рассчитать</button>
                 </form>
             </div>
 
             <!-- Расчет по бюджету -->
             <div class="calculator-card">
-                <h2 class="card-title">💰 Расчет по бюджету</h2>
+                <h2 class="card-title" data-translate="calc_by_budget">💰 Расчет по бюджету</h2>
                 <form id="budget-form">
                     <div class="form-group">
-                        <label for="stone-type-2">Тип камня:</label>
+                        <label for="stone-type-2" data-translate="stone_type">Тип камня:</label>
                         <select id="stone-type-2" class="stone-type-select" required>
-                            <option value="">Выберите тип камня</option>
-                            <option value="Fire">🔥 Fire (Атака)</option>
-                            <option value="Water">💧 Water (Здоровье)</option>
-                            <option value="Ice">❄️ Ice (Атака)</option>
-                            <option value="Wind">💨 Wind (Защита)</option>
+                            <option value="" data-translate="select_stone">Выберите тип камня</option>
+                            <option value="Fire" data-translate-prefix="fire_option">🔥 Fire (Атака)</option>
+                            <option value="Water" data-translate-prefix="water_option">💧 Water (Здоровье)</option>
+                            <option value="Ice" data-translate-prefix="ice_option">❄️ Ice (Атака)</option>
+                            <option value="Wind" data-translate-prefix="wind_option">💨 Wind (Защита)</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label for="budget">Доступный бюджет:</label>
-                        <input type="number" id="budget" min="0" step="0.01" placeholder="Введите бюджет" required>
+                        <label for="budget" data-translate="available_budget">Доступный бюджет:</label>
+                        <input type="number" id="budget" min="0" step="0.01" data-translate-placeholder="enter_budget" placeholder="Введите бюджет" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="price-per-stone-2">Цена за камень:</label>
-                        <input type="number" id="price-per-stone-2" min="0" step="0.01" placeholder="Введите цену" required>
+                        <label for="price-per-stone-2" data-translate="price_per_stone">Цена за камень:</label>
+                        <input type="number" id="price-per-stone-2" min="0" step="0.01" data-translate-placeholder="enter_price" placeholder="Введите цену" required>
                     </div>
 
                     <div class="slot-config">
                         <div class="form-group">
-                            <label for="equipment-slots-2">Количество предметов:</label>
+                            <label for="equipment-slots-2" data-translate="equipment_count">Количество предметов:</label>
                             <input type="number" id="equipment-slots-2" min="1" max="7" value="6" placeholder="6-7">
                         </div>
                         <div class="form-group">
-                            <label for="stones-per-item-2">Камней на предмет:</label>
+                            <label for="stones-per-item-2" data-translate="stones_per_item">Камней на предмет:</label>
                             <input type="number" id="stones-per-item-2" min="1" max="3" value="3" placeholder="1-3">
                         </div>
                     </div>
                     
-                    <button type="submit" class="calculate-btn">💎 Рассчитать</button>
+                    <button type="submit" class="calculate-btn" data-translate="calculate_btn2">💎 Рассчитать</button>
                 </form>
             </div>
         </div>
 
         <!-- Результаты -->
         <div id="results" class="results-section">
-            <h2 class="results-title">📈 Результаты расчета</h2>
+            <h2 class="results-title" data-translate="results_title">📈 Результаты расчета</h2>
             <div id="results-content"></div>
         </div>
     </div>
 
     <script>
+        // Локализация
+        const TRANSLATIONS = {
+            ru: {
+                title: "🔮 Калькулятор Камней",
+                subtitle: "Рассчитайте стоимость и характеристики ваших камней с учетом бонусов",
+                version: "✨ Расширенная версия - с бонусами и слотами",
+                calc_by_stones: "📊 Расчет по количеству камней",
+                calc_by_budget: "💰 Расчет по бюджету",
+                stone_type: "Тип камня:",
+                select_stone: "Выберите тип камня",
+                fire_option: "🔥 Fire (Атака)",
+                water_option: "💧 Water (Здоровье)",
+                ice_option: "❄️ Ice (Атака)",
+                wind_option: "💨 Wind (Защита)",
+                base_stones_count: "Количество базовых камней (1 уровень):",
+                price_per_stone: "Цена за камень:",
+                available_budget: "Доступный бюджет:",
+                equipment_count: "Количество предметов:",
+                stones_per_item: "Камней на предмет:",
+                calculate_btn: "🧮 Рассчитать",
+                calculate_btn2: "💎 Рассчитать",
+                results_title: "📈 Результаты расчета",
+                enter_count: "Введите количество",
+                enter_price: "Введите цену",
+                enter_budget: "Введите бюджет",
+                attack: "Атака",
+                health: "Здоровье",
+                defense: "Защита",
+                max_level: "Максимальный уровень",
+                total_cost: "Общая стоимость",
+                base_stones: "Базовых камней",
+                available_slots: "Доступно слотов",
+                level_breakdown: "📋 Распределение камней по уровням:",
+                level: "Уровень",
+                stones: "камней",
+                per_stone: "за камень",
+                total: "Общий",
+                optimization_title: "🎯 Оптимизация распределения камней",
+                stones_in_slots: "Камни в слотах:",
+                total_level: "Суммарный LVL:",
+                bonus_level: "Бонус LVL",
+                no_bonus: "Нет бонуса",
+                available_bonuses: "🎁 Доступные бонусы",
+                insufficient_funds: "Недостаточно средств для покупки камней.",
+                calculating: "⏳ Выполняется расчет...",
+                fill_fields: "Пожалуйста, заполните все поля корректно",
+                positive_values: "Количество камней и цена должны быть положительными",
+                budget_positive: "Бюджет должен быть положительным, цена должна быть больше нуля",
+                unknown_stone: "Неизвестный тип камня:",
+                calculation_error: "Ошибка при выполнении расчета:"
+            },
+            en: {
+                title: "🔮 Stone Calculator",
+                subtitle: "Calculate the cost and characteristics of your stones with bonuses",
+                version: "✨ Enhanced version - with bonuses and slots",
+                calc_by_stones: "📊 Calculate by stones count",
+                calc_by_budget: "💰 Calculate by budget",
+                stone_type: "Stone type:",
+                select_stone: "Select stone type",
+                fire_option: "🔥 Fire (Attack)",
+                water_option: "💧 Water (Health)",
+                ice_option: "❄️ Ice (Attack)",
+                wind_option: "💨 Wind (Defense)",
+                base_stones_count: "Number of base stones (level 1):",
+                price_per_stone: "Price per stone:",
+                available_budget: "Available budget:",
+                equipment_count: "Number of equipment:",
+                stones_per_item: "Stones per item:",
+                calculate_btn: "🧮 Calculate",
+                calculate_btn2: "💎 Calculate",
+                results_title: "📈 Calculation Results",
+                enter_count: "Enter count",
+                enter_price: "Enter price",
+                enter_budget: "Enter budget",
+                attack: "Attack",
+                health: "Health",
+                defense: "Defense",
+                max_level: "Maximum level",
+                total_cost: "Total cost",
+                base_stones: "Base stones",
+                available_slots: "Available slots",
+                level_breakdown: "📋 Stones distribution by levels:",
+                level: "Level",
+                stones: "stones",
+                per_stone: "per stone",
+                total: "Total",
+                optimization_title: "🎯 Stone distribution optimization",
+                stones_in_slots: "Stones in slots:",
+                total_level: "Total LVL:",
+                bonus_level: "Bonus LVL",
+                no_bonus: "No bonus",
+                available_bonuses: "🎁 Available bonuses",
+                insufficient_funds: "Insufficient funds to buy stones.",
+                calculating: "⏳ Calculating...",
+                fill_fields: "Please fill all fields correctly",
+                positive_values: "Stone count and price must be positive",
+                budget_positive: "Budget must be positive, price must be greater than zero",
+                unknown_stone: "Unknown stone type:",
+                calculation_error: "Calculation error:"
+            },
+            bg: {
+                title: "🔮 Калкулатор за Камъни",
+                subtitle: "Изчислете цената и характеристиките на вашите камъни с бонуси",
+                version: "✨ Разширена версия - с бонуси и слотове",
+                calc_by_stones: "📊 Изчисляване по брой камъни",
+                calc_by_budget: "💰 Изчисляване по бюджет",
+                stone_type: "Тип камък:",
+                select_stone: "Изберете тип камък",
+                fire_option: "🔥 Fire (Атака)",
+                water_option: "💧 Water (Здраве)",
+                ice_option: "❄️ Ice (Атака)",
+                wind_option: "💨 Wind (Защита)",
+                base_stones_count: "Брой базови камъни (ниво 1):",
+                price_per_stone: "Цена за камък:",
+                available_budget: "Наличен бюджет:",
+                equipment_count: "Брой екипировка:",
+                stones_per_item: "Камъни на предмет:",
+                calculate_btn: "🧮 Изчисли",
+                calculate_btn2: "💎 Изчисли",
+                results_title: "📈 Резултати от изчислението",
+                enter_count: "Въведете брой",
+                enter_price: "Въведете цена",
+                enter_budget: "Въведете бюджет",
+                attack: "Атака",
+                health: "Здраве",
+                defense: "Защита",
+                max_level: "Максимално ниво",
+                total_cost: "Обща цена",
+                base_stones: "Базови камъни",
+                available_slots: "Налични слотове",
+                level_breakdown: "📋 Разпределение на камъните по нива:",
+                level: "Ниво",
+                stones: "камъни",
+                per_stone: "за камък",
+                total: "Общо",
+                optimization_title: "🎯 Оптимизация на разпределението на камъните",
+                stones_in_slots: "Камъни в слотове:",
+                total_level: "Общо LVL:",
+                bonus_level: "Бонус LVL",
+                no_bonus: "Няма бонус",
+                available_bonuses: "🎁 Налични бонуси",
+                insufficient_funds: "Недостатъчни средства за покупка на камъни.",
+                calculating: "⏳ Изчислява се...",
+                fill_fields: "Моля, попълнете всички полета правилно",
+                positive_values: "Броят камъни и цената трябва да бъдат положителни",
+                budget_positive: "Бюджетът трябва да бъде положителен, цената трябва да бъде по-голяма от нула",
+                unknown_stone: "Неизвестен тип камък:",
+                calculation_error: "Грешка при изчислението:"
+            }
+        };
+
+        // Текущий язык
+        let currentLang = 'ru';
+
+        // Функция для смены языка
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.querySelector('html').setAttribute('lang', lang);
+            
+            // Обновляем активный язык в переключателе
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Обновляем весь текст на странице
+            updatePageText();
+
+            // Сохраняем выбор в localStorage
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        // Функция для обновления текста на странице
+        function updatePageText() {
+            const translations = TRANSLATIONS[currentLang];
+            
+            // Обновляем элементы с data-translate
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[key]) {
+                    element.textContent = translations[key];
+                }
+            });
+
+            // Обновляем placeholder'ы
+            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[key]) {
+                    element.setAttribute('placeholder', translations[key]);
+                }
+            });
+
+            // Обновляем опции select'ов
+            document.querySelectorAll('[data-translate-prefix]').forEach(element => {
+                const key = element.getAttribute('data-translate-prefix');
+                if (translations[key]) {
+                    element.textContent = translations[key];
+                }
+            });
+        }
+
+        // Функция для получения перевода
+        function t(key) {
+            return TRANSLATIONS[currentLang][key] || key;
+        }
+
         // Конфигурация типов камней
         const STONE_TYPES = {
             'Fire': { base_stat: 'attack', base_value: 0, increment: 1 },
@@ -429,60 +678,60 @@
         // Бонусные характеристики из таблицы
         const BONUS_TABLE = {
             'Water': [
-                { level: 21, value: 12, bonus: '30% restore HP' },
-                { level: 42, value: 21, bonus: '5%' },
-                { level: 63, value: 31, bonus: '7.50%' },
-                { level: 84, value: 44, bonus: '12.50%' },
-                { level: 105, value: 52, bonus: '15%' },
-                { level: 126, value: 83, bonus: '17.50%' },
-                { level: 147, value: 143, bonus: '20%' },
-                { level: 168, value: 261, bonus: '20%' },
-                { level: 189, value: 495, bonus: '20%' },
-                { level: 210, value: 952, bonus: '20%' },
-                { level: 231, value: 1840, bonus: '20%' },
-                { level: 252, value: 3543, bonus: '20%' }
+                { level: 21, value: 12, bonus: '30% Restore HP' },
+                { level: 42, value: 21, bonus: '30% Restore HP' },
+                { level: 63, value: 31, bonus: '30% Restore HP' },
+                { level: 84, value: 44, bonus: '30% Restore HP' },
+                { level: 105, value: 52, bonus: '30% Restore HP' },
+                { level: 126, value: 83, bonus: '30% Restore HP' },
+                { level: 147, value: 143, bonus: '30% Restore HP' },
+                { level: 168, value: 261, bonus: '30% Restore HP' },
+                { level: 189, value: 495, bonus: '30% Restore HP' },
+                { level: 210, value: 952, bonus: '30% Restore HP' },
+                { level: 231, value: 1840, bonus: '30% Restore HP' },
+                { level: 252, value: 3543, bonus: '30% Restore HP' }
             ],
             'Ice': [
-                { level: 21, value: 0, bonus: '% ATK bonus' },
-                { level: 42, value: 0, bonus: '10%' },
-                { level: 63, value: 0, bonus: '10%' },
-                { level: 84, value: 0, bonus: '10%' },
-                { level: 105, value: 0, bonus: '10%' },
-                { level: 126, value: 0, bonus: '10%' },
-                { level: 147, value: 0, bonus: '10%' },
-                { level: 168, value: 0, bonus: '10%' },
-                { level: 189, value: 0, bonus: '10%' },
-                { level: 210, value: 0, bonus: '10%' },
-                { level: 231, value: 0, bonus: '10%' },
-                { level: 252, value: 0, bonus: '10%' }
+                { level: 21, value: 5, bonus: '10% ATK Bonus' },
+                { level: 42, value: 7.5, bonus: '14% ATK Bonus' },
+                { level: 63, value: 10, bonus: '18% ATK Bonus' },
+                { level: 84, value: 12.5, bonus: '22% ATK Bonus' },
+                { level: 105, value: 15, bonus: '26% ATK Bonus' },
+                { level: 126, value: 17.5, bonus: '30% ATK Bonus' },
+                { level: 147, value: 20, bonus: '34% ATK Bonus' },
+                { level: 168, value: 20, bonus: '38% ATK Bonus' },
+                { level: 189, value: 20, bonus: '42% ATK Bonus' },
+                { level: 210, value: 20, bonus: '46% ATK Bonus' },
+                { level: 231, value: 20, bonus: '50% ATK Bonus' },
+                { level: 252, value: 20, bonus: '54% ATK Bonus' }
             ],
             'Wind': [
-                { level: 21, value: 0, bonus: 'PVP DMG Red' },
-                { level: 42, value: 4.18, bonus: '4.18%' },
-                { level: 63, value: 4.92, bonus: '4.92%' },
-                { level: 84, value: 5.79, bonus: '5.79%' },
-                { level: 105, value: 6.81, bonus: '6.81%' },
-                { level: 126, value: 8.01, bonus: '8.01%' },
-                { level: 147, value: 9.43, bonus: '9.43%' },
-                { level: 168, value: 11.09, bonus: '11.09%' },
-                { level: 189, value: 13.05, bonus: '13.05%' },
-                { level: 210, value: 15.35, bonus: '15.35%' },
-                { level: 231, value: 18.06, bonus: '18.06%' },
-                { level: 252, value: 21.25, bonus: '21.25%' }
+                { level: 21, value: 4.18, bonus: 'PVP DMG Reduce 4.18%' },
+                { level: 42, value: 4.92, bonus: 'PVP DMG Reduce 4.92%' },
+                { level: 63, value: 5.79, bonus: 'PVP DMG Reduce 5.79%' },
+                { level: 84, value: 6.81, bonus: 'PVP DMG Reduce 6.81%' },
+                { level: 105, value: 8.01, bonus: 'PVP DMG Reduce 8.01%' },
+                { level: 126, value: 9.43, bonus: 'PVP DMG Reduce 9.43%' },
+                { level: 147, value: 11.09, bonus: 'PVP DMG Reduce 11.09%' },
+                { level: 168, value: 13.05, bonus: 'PVP DMG Reduce 13.05%' },
+                { level: 189, value: 15.35, bonus: 'PVP DMG Reduce 15.35%' },
+                { level: 210, value: 18.06, bonus: 'PVP DMG Reduce 18.06%' },
+                { level: 231, value: 21.25, bonus: 'PVP DMG Reduce 21.25%' },
+                { level: 252, value: 25, bonus: 'PVP DMG Reduce 25%' }
             ],
             'Fire': [
-                { level: 21, value: 0, bonus: '30% extra DMG' },
-                { level: 42, value: 4, bonus: '4' },
-                { level: 63, value: 6, bonus: '6' },
-                { level: 84, value: 8, bonus: '8' },
-                { level: 105, value: 10, bonus: '10' },
-                { level: 126, value: 16, bonus: '16' },
-                { level: 147, value: 48, bonus: '48' },
-                { level: 168, value: 51, bonus: '51' },
-                { level: 189, value: 90, bonus: '90' },
-                { level: 210, value: 150, bonus: '150' },
-                { level: 231, value: 368, bonus: '368' },
-                { level: 252, value: 708, bonus: '708' }
+                { level: 21, value: 24, bonus: '30% extra DMG 24' },
+                { level: 42, value: 42, bonus: '30% extra DMG 42' },
+                { level: 63, value: 63, bonus: '30% extra DMG 63' },
+                { level: 84, value: 88, bonus: '30% extra DMG 88' },
+                { level: 105, value: 105, bonus: '30% extra DMG 105' },
+                { level: 126, value: 167, bonus: '30% extra DMG 167' },
+                { level: 147, value: 286, bonus: '30% extra DMG 286' },
+                { level: 168, value: 523, bonus: '30% extra DMG 523' },
+                { level: 189, value: 990, bonus: '30% extra DMG 990' },
+                { level: 210, value: 1904, bonus: '30% extra DMG 1904' },
+                { level: 231, value: 3681, bonus: '30% extra DMG 3681' },
+                { level: 252, value: 7086, bonus: '30% extra DMG 7086' }
             ]
         };
 
@@ -678,6 +927,18 @@
 
         // Обработчики событий
         document.addEventListener('DOMContentLoaded', function() {
+            // Восстанавливаем сохраненный язык
+            const savedLang = localStorage.getItem('preferred-language') || 'ru';
+            changeLanguage(savedLang);
+
+            // Добавляем обработчики для переключения языка
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.dataset.lang;
+                    changeLanguage(lang);
+                });
+            });
+
             // Обработчик формы расчета по камням
             document.getElementById('stones-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -689,12 +950,12 @@
                 const stonesPerItem = parseInt(document.getElementById('stones-per-item-1').value) || 3;
                 
                 if (!stoneType || isNaN(baseStones) || isNaN(pricePerStone)) {
-                    showError('Пожалуйста, заполните все поля корректно');
+                    showError(t('fill_fields'));
                     return;
                 }
 
                 if (baseStones < 0 || pricePerStone < 0) {
-                    showError('Количество камней и цена должны быть положительными');
+                    showError(t('positive_values'));
                     return;
                 }
                 
@@ -712,12 +973,12 @@
                 const stonesPerItem = parseInt(document.getElementById('stones-per-item-2').value) || 3;
                 
                 if (!stoneType || isNaN(budget) || isNaN(pricePerStone)) {
-                    showError('Пожалуйста, заполните все поля корректно');
+                    showError(t('fill_fields'));
                     return;
                 }
 
                 if (budget < 0 || pricePerStone <= 0) {
-                    showError('Бюджет должен быть положительным, цена должна быть больше нуля');
+                    showError(t('budget_positive'));
                     return;
                 }
                 
@@ -733,13 +994,13 @@
                 const result = EnhancedStoneCalculator.calculateStonesFromBase(stoneType, baseStones, pricePerStone, equipmentSlots, stonesPerItem);
                 
                 if (result === null) {
-                    showError(`Неизвестный тип камня: ${stoneType}`);
+                    showError(t('unknown_stone') + ' ' + stoneType);
                     return;
                 }
                 
                 displayResults(result, 'stones');
             } catch (error) {
-                showError('Ошибка при выполнении расчета: ' + error.message);
+                showError(t('calculation_error') + ' ' + error.message);
             }
         }
 
@@ -751,13 +1012,13 @@
                 const result = EnhancedStoneCalculator.calculateStonesFromBudget(stoneType, budget, pricePerStone, equipmentSlots, stonesPerItem);
                 
                 if (result === null) {
-                    showError(`Неизвестный тип камня: ${stoneType}`);
+                    showError(t('unknown_stone') + ' ' + stoneType);
                     return;
                 }
                 
                 displayResults(result, 'budget');
             } catch (error) {
-                showError('Ошибка при выполнении расчета: ' + error.message);
+                showError(t('calculation_error') + ' ' + error.message);
             }
         }
 
@@ -773,31 +1034,25 @@
                 'Wind': '💨'
             };
             
-            const statNames = {
-                'attack': 'Атака',
-                'health': 'Здоровье',
-                'defense': 'Защита'
-            };
-            
             let html = `
                 <div class="result-card animation-fade-in">
                     <h3>${stoneEmoji[result.stone_type]} ${result.stone_type}</h3>
                     
                     <div class="result-summary">
                         <div class="summary-item">
-                            <div class="label">Максимальный уровень</div>
+                            <div class="label">${t('max_level')}</div>
                             <div class="value">${result.max_level}</div>
                         </div>
                         <div class="summary-item">
-                            <div class="label">Общая стоимость</div>
+                            <div class="label">${t('total_cost')}</div>
                             <div class="value">${result.total_cost || result.budget || 0}</div>
                         </div>
                         <div class="summary-item">
-                            <div class="label">Базовых камней</div>
+                            <div class="label">${t('base_stones')}</div>
                             <div class="value">${result.base_stones}</div>
                         </div>
                         <div class="summary-item">
-                            <div class="label">Доступно слотов</div>
+                            <div class="label">${t('available_slots')}</div>
                             <div class="value">${result.max_slots}</div>
                         </div>
                     </div>
@@ -806,7 +1061,7 @@
             if (Object.keys(result.stats_by_level).length > 0) {
                 html += `
                     <div class="stones-breakdown">
-                        <h4>📋 Распределение камней по уровням:</h4>
+                        <h4>${t('level_breakdown')}</h4>
                 `;
                 
                 // Сортируем уровни по возрастанию
@@ -816,9 +1071,9 @@
                     const stats = result.stats_by_level[level];
                     html += `
                         <div class="stone-level">
-                            <div><strong>Уровень ${level}:</strong> ${stats.count} камней</div>
-                            <div><strong>${statNames[stats.stat_type]}:</strong> ${stats.stat_value} за камень</div>
-                            <div><strong>Общий ${statNames[stats.stat_type]}:</strong> ${stats.total_stat}</div>
+                            <div><strong>${t('level')} ${level}:</strong> ${stats.count} ${t('stones')}</div>
+                            <div><strong>${t(stats.stat_type)}:</strong> ${stats.stat_value} ${t('per_stone')}</div>
+                            <div><strong>${t('total')} ${t(stats.stat_type)}:</strong> ${stats.total_stat}</div>
                         </div>
                     `;
                 }
@@ -835,7 +1090,7 @@
                 
                 html += `
                     <div class="summary-item" style="margin-top: 20px; background: rgba(255,255,255,0.3);">
-                        <div class="label">Итого ${statNames[statType]}</div>
+                        <div class="label">${t('total')} ${t(statType)}</div>
                         <div class="value" style="font-size: 1.5rem;">${totalStats}</div>
                     </div>
                 `;
@@ -844,7 +1099,7 @@
                 if (result.optimization && result.optimization.configurations.length > 0) {
                     html += `
                         <div class="optimization-section">
-                            <div class="bonus-title">🎯 Оптимизация распределения камней</div>
+                            <div class="bonus-title">${t('optimization_title')}</div>
                     `;
 
                     for (const config of result.optimization.configurations) {
@@ -852,11 +1107,11 @@
                             <div class="bonus-item">
                                 <div>
                                     <strong>${config.name}</strong><br>
-                                    Камни в слотах: [${config.stones.join(', ')}]<br>
-                                    Суммарный LVL: ${config.total_level}
+                                    ${t('stones_in_slots')} [${config.stones.join(', ')}]<br>
+                                    ${t('total_level')} ${config.total_level}
                                 </div>
                                 <div>
-                                    ${config.bonus ? `<strong>Бонус LVL ${config.bonus.level}:</strong><br>${config.bonus.bonus}` : 'Нет бонуса'}
+                                    ${config.bonus ? `<strong>${t('bonus_level')} ${config.bonus.level}:</strong><br>${config.bonus.bonus}` : t('no_bonus')}
                                 </div>
                             </div>
                         `;
@@ -870,7 +1125,7 @@
                 if (bonusTable && bonusTable.length > 0) {
                     html += `
                         <div class="bonus-section">
-                            <div class="bonus-title">🎁 Доступные бонусы</div>
+                            <div class="bonus-title">${t('available_bonuses')}</div>
                     `;
 
                     for (const bonus of bonusTable.slice(0, 6)) { // Показываем первые 6 бонусов
@@ -885,7 +1140,7 @@
                     html += `</div>`;
                 }
             } else {
-                html += `<p style="text-align: center; margin-top: 20px;">Недостаточно средств для покупки камней.</p>`;
+                html += `<p style="text-align: center; margin-top: 20px;">${t('insufficient_funds')}</p>`;
             }
             
             html += `</div>`;
@@ -900,7 +1155,7 @@
             const resultsDiv = document.getElementById('results');
             const resultsContent = document.getElementById('results-content');
             
-            resultsContent.innerHTML = '<div class="loading">⏳ Выполняется расчет...</div>';
+            resultsContent.innerHTML = `<div class="loading">${t('calculating')}</div>`;
             resultsDiv.style.display = 'block';
         }
 
@@ -915,4 +1170,3 @@
     </script>
 </body>
 </html>
-
