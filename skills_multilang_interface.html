@@ -267,7 +267,7 @@
         
         <div class="content">
             <div class="search-box">
-                <input type="text" id="searchInput" data-i18n-placeholder="search-placeholder" placeholder="🔍 Search skills by name, ID or description...">
+                <input type="text" id="searchInput" data-i18n-placeholder="search-placeholder" placeholder="🔍 Search skills by name or description...">
             </div>
             
             <div class="filter-tabs">
@@ -29217,11 +29217,10 @@
             
             skillCards.forEach(card => {
                 const skillName = card.querySelector('.skill-name').textContent.toLowerCase();
-                const skillId = card.querySelector('.skill-id').textContent.toLowerCase();
                 const description = card.querySelector('.skill-description');
                 const descText = description ? description.textContent.toLowerCase() : '';
                 
-                if (skillName.includes(searchTerm) || skillId.includes(searchTerm) || descText.includes(searchTerm)) {
+                if (skillName.includes(searchTerm) || descText.includes(searchTerm)) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
@@ -29260,3 +29259,4 @@
 </body>
 
 </html>
+
