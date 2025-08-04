@@ -121,6 +121,33 @@
       position: relative;
       overflow: hidden;
     }
+    .save-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 4px 16px rgba(52, 211, 153, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    .save-btn:hover {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      box-shadow: 
+        0 6px 24px rgba(52, 211, 153, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
     button::before {
       content: '';
       position: absolute;
@@ -253,6 +280,9 @@
     <label for="currentLevel" id="labelCurrent"></label>
     <input type="number" id="currentLevel" min="1" max="2000" value="1">
 
+    <label for="currentPercent" id="labelCurrentPercent"></label>
+    <input type="number" id="currentPercent" min="0" max="99.99" step="0.01" value="0" placeholder="0.00">
+
     <label for="targetLevel" id="labelTarget"></label>
     <input type="number" id="targetLevel" min="1" max="2000" value="10">
 
@@ -291,6 +321,7 @@
     </select>
 
     <button id="calcBtn" onclick="calculateTime()"></button>
+    <button id="saveBtn" class="save-btn" onclick="saveToUrl()" style="display: none;"></button>
     <div class="result" id="result"></div>
   </div>
 
@@ -305,10 +336,12 @@
       en: {
         title: 'Level Up Time Calculator by Dima',
         current: 'Current level:',
+        currentPercent: 'Current level progress (%):',
         target: 'Target level:',
         expPerMin: 'EXP per minute:',
         unit: 'Unit:',
         btn: 'Calculate',
+        saveBtn: 'Save Settings',
         error: 'Check your input.',
         loading: 'Loading level data error!',
         resultExp: 'Total EXP required:',
@@ -316,14 +349,17 @@
         sec: 'sec.',
         min: 'min.',
         hour: 'h.',
+        linkCopied: 'Link copied to clipboard!',
       },
       ru: {
         title: 'Калькулятор времени прокачки уровня by Dima',
         current: 'Текущий уровень:',
+        currentPercent: 'Прогресс текущего уровня (%):',
         target: 'Требуемый уровень:',
         expPerMin: 'Опыт в минуту:',
         unit: 'Единица измерения:',
         btn: 'Рассчитать',
+        saveBtn: 'Сохранить настройки',
         error: 'Проверьте введённые данные.',
         loading: 'Ошибка загрузки данных уровней!',
         resultExp: 'Всего нужно опыта:',
@@ -331,14 +367,17 @@
         sec: 'сек.',
         min: 'мин.',
         hour: 'ч.',
+        linkCopied: 'Ссылка скопирована в буфер обмена!',
       },
       bg: {
         title: 'Калкулатор за време до ниво by Dima',
         current: 'Текущо ниво:',
+        currentPercent: 'Прогрес на текущо ниво (%):',
         target: 'Желано ниво:',
         expPerMin: 'Опит на минута:',
         unit: 'Единица:',
         btn: 'Изчисли',
+        saveBtn: 'Запази настройки',
         error: 'Проверете въведените данни.',
         loading: 'Грешка при зареждане на нивата!',
         resultExp: 'Общо нужен опит:',
@@ -346,14 +385,17 @@
         sec: 'сек.',
         min: 'мин.',
         hour: 'ч.',
+        linkCopied: 'Връзката е копирана!',
       },
       es: {
         title: 'Calculadora de tiempo de subida de nivel by Dima',
         current: 'Nivel actual:',
+        currentPercent: 'Progreso del nivel actual (%):',
         target: 'Nivel objetivo:',
         expPerMin: 'EXP por minuto:',
         unit: 'Unidad:',
         btn: 'Calcular',
+        saveBtn: 'Guardar configuración',
         error: 'Verifique los datos ingresados.',
         loading: '¡Error al cargar los datos de nivel!',
         resultExp: 'EXP total requerida:',
@@ -361,6 +403,7 @@
         sec: 'seg.',
         min: 'min.',
         hour: 'h.',
+        linkCopied: '¡Enlace copiado al portapapeles!',
       }
     };
 
@@ -368,10 +411,12 @@
       lang = l;
       document.getElementById('title').innerText = translations[lang].title;
       document.getElementById('labelCurrent').innerText = translations[lang].current;
+      document.getElementById('labelCurrentPercent').innerText = translations[lang].currentPercent;
       document.getElementById('labelTarget').innerText = translations[lang].target;
       document.getElementById('labelExpPerMin').innerText = translations[lang].expPerMin;
       document.getElementById('labelUnit').innerText = translations[lang].unit;
       document.getElementById('calcBtn').innerText = translations[lang].btn;
+      document.getElementById('saveBtn').innerText = translations[lang].saveBtn;
       document.getElementById('labelBonus30').innerText = {
         en: '+30% EXP (Event/Scroll)',
         ru: '+30% опыта (Событие/Свиток)',
@@ -401,7 +446,62 @@
     window.onload = function() {
       setLang('en');
       document.getElementById('langSelect').value = 'en';
+      loadFromUrl(); // Загружаем настройки из URL
     };
+
+    // Загрузка настроек из URL хеша
+    function loadFromUrl() {
+      const hash = window.location.hash.substring(1);
+      if (hash) {
+        try {
+          const params = new URLSearchParams(hash);
+          if (params.get('c')) document.getElementById('currentLevel').value = params.get('c');
+          if (params.get('cp')) document.getElementById('currentPercent').value = params.get('cp');
+          if (params.get('t')) document.getElementById('targetLevel').value = params.get('t');
+          if (params.get('e')) document.getElementById('expPerMinute').value = params.get('e');
+          if (params.get('u')) document.getElementById('unit').value = params.get('u');
+          if (params.get('b')) document.getElementById('bonus30').checked = params.get('b') === '1';
+          if (params.get('em')) document.getElementById('emblem').value = params.get('em');
+          if (params.get('l')) {
+            const langValue = params.get('l');
+            document.getElementById('langSelect').value = langValue;
+            setLang(langValue);
+          }
+        } catch (e) {
+          console.log('Ошибка загрузки настроек из URL:', e);
+        }
+      }
+    }
+
+    // Сохранение настроек в URL и копирование ссылки
+    function saveToUrl() {
+      const params = new URLSearchParams();
+      params.set('c', document.getElementById('currentLevel').value);
+      params.set('cp', document.getElementById('currentPercent').value);
+      params.set('t', document.getElementById('targetLevel').value);
+      params.set('e', document.getElementById('expPerMinute').value);
+      params.set('u', document.getElementById('unit').value);
+      params.set('b', document.getElementById('bonus30').checked ? '1' : '0');
+      params.set('em', document.getElementById('emblem').value);
+      params.set('l', lang);
+      
+      const url = window.location.origin + window.location.pathname + '#' + params.toString();
+      
+      // Копируем ссылку в буфер обмена
+      navigator.clipboard.writeText(url).then(() => {
+        // Показываем уведомление
+        const result = document.getElementById('result');
+        const originalContent = result.innerHTML;
+        result.innerHTML = `<div style="color: #10b981; font-weight: 700;">${translations[lang].linkCopied}</div>`;
+        
+        setTimeout(() => {
+          result.innerHTML = originalContent;
+        }, 2000);
+      }).catch(() => {
+        // Если не получилось скопировать, просто показываем ссылку
+        prompt('Скопируйте эту ссылку:', url);
+      });
+    }
 
     async function loadLevelData() {
       try {
@@ -419,10 +519,17 @@
       }
     }
 
-    function sumExp(from, to) {
+    function sumExp(from, to, currentPercent = 0) {
       let sum = 0;
       for (let i = from; i < to; i++) {
-        if (levelExp[i]) sum += Number(levelExp[i]);
+        if (levelExp[i]) {
+          if (i === from && currentPercent > 0) {
+            // Для текущего уровня учитываем только оставшуюся часть
+            sum += Number(levelExp[i]) * (100 - currentPercent) / 100;
+          } else {
+            sum += Number(levelExp[i]);
+          }
+        }
       }
       return sum;
     }
@@ -441,6 +548,7 @@
         if (!levelLoaded) return;
       }
       const current = parseInt(document.getElementById('currentLevel').value);
+      const currentPercent = parseFloat(document.getElementById('currentPercent').value) || 0;
       const target = parseInt(document.getElementById('targetLevel').value);
       let expPerMin = parseFloat(document.getElementById('expPerMinute').value);
       const unit = parseInt(document.getElementById('unit').value);
@@ -450,15 +558,31 @@
       // бонус эмблемы
       const emblemBonus = parseFloat(document.getElementById('emblem').value);
       if (!isNaN(emblemBonus) && emblemBonus > 0) expPerMin *= (1 + emblemBonus);
-      if (isNaN(current) || isNaN(target) || isNaN(expPerMin) || current < 1 || target <= current) {
+      if (isNaN(current) || isNaN(target) || isNaN(expPerMin) || current < 1 || target <= current || currentPercent < 0 || currentPercent >= 100) {
         document.getElementById('result').innerHTML = translations[lang].error;
+        document.getElementById('saveBtn').style.display = 'none';
         return;
       }
-      const totalExp = sumExp(current, target);
+      const totalExp = sumExp(current, target, currentPercent);
       const minutes = totalExp / expPerMin;
+      
+      // Форматируем процент для показа
+      const percentText = currentPercent > 0 ? ` (${currentPercent.toFixed(2)}%)` : '';
+      
       document.getElementById('result').innerHTML =
         `${translations[lang].resultExp} <b>${totalExp.toLocaleString('en-US')}</b><br>` +
         `${translations[lang].resultTime} <b>${formatTime(minutes)}</b>`;
+      
+      // Показываем кнопку сохранения
+      document.getElementById('saveBtn').style.display = 'block';
+      
+      // Скроллим к результату
+      setTimeout(() => {
+        document.getElementById('result').scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+      }, 100);
     }
   </script>
 </body>
