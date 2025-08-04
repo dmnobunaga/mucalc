@@ -6,84 +6,177 @@
   <title>MU Immportal Level Up Time Calculator</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(120deg, #e0eafc, #cfdef3);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+      overflow-x: hidden;
     }
     .container {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-      padding: 32px 28px 24px 28px;
-      max-width: 420px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 
+        0 8px 32px rgba(0,0,0,0.12),
+        0 2px 8px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+      padding: 36px 32px 28px 32px;
+      max-width: 450px;
       width: 100%;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.2);
+      animation: slideUp 0.8s ease-out;
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    h1 {
+      text-align: center;
+      color: #2d3a4b;
+      margin-bottom: 8px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
-      color: #2d3a4b;
-      margin-bottom: 18px;
+      color: #4a5568;
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
     }
     label {
       display: block;
-      margin: 12px 0 4px 0;
-      color: #3a4a5d;
-      font-weight: 500;
+      margin: 16px 0 6px 0;
+      color: #4a5568;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
     }
     input, select {
       width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid #d1d9e6;
-      border-radius: 10px;
-      font-size: 1.08rem;
-      margin-bottom: 14px;
+      padding: 14px 18px;
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      border-radius: 14px;
+      font-size: 1.1rem;
+      margin-bottom: 16px;
       box-sizing: border-box;
-      background: #f7fafd;
-      transition: border 0.2s, box-shadow 0.2s;
+      background: linear-gradient(145deg, #f8fafc, #ffffff);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       outline: none;
+      font-weight: 500;
+      box-shadow: 
+        0 2px 8px rgba(102, 126, 234, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.9);
     }
     input:focus, select:focus {
-      border: 1.5px solid #4f8cff;
-      box-shadow: 0 0 0 2px #e0eafc;
+      border: 2px solid #667eea;
+      box-shadow: 
+        0 0 0 4px rgba(102, 126, 234, 0.15),
+        0 4px 16px rgba(102, 126, 234, 0.2);
+      transform: translateY(-1px);
+      background: linear-gradient(145deg, #ffffff, #f8fafc);
+    }
+    input:hover, select:hover {
+      border-color: rgba(102, 126, 234, 0.4);
+      transform: translateY(-0.5px);
+      box-shadow: 
+        0 4px 12px rgba(102, 126, 234, 0.12),
+        inset 0 1px 0 rgba(255,255,255,0.9);
     }
     button {
       width: 100%;
-      padding: 12px;
-      background: linear-gradient(90deg, #4f8cff 0%, #2563eb 100%);
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #fff;
       border: none;
-      border-radius: 10px;
-      font-size: 1.15rem;
+      border-radius: 16px;
+      font-size: 1.2rem;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 16px;
-      transition: background 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(79,140,255,0.08);
-      letter-spacing: 0.5px;
+      margin-top: 20px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 4px 16px rgba(102, 126, 234, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+    }
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    button:hover::before {
+      left: 100%;
     }
     button:hover {
-      background: linear-gradient(90deg, #2563eb 0%, #4f8cff 100%);
-      box-shadow: 0 4px 16px rgba(79,140,255,0.13);
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+      box-shadow: 
+        0 6px 24px rgba(102, 126, 234, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 
+        0 2px 8px rgba(102, 126, 234, 0.3),
+        0 1px 4px rgba(0, 0, 0, 0.1);
     }
     .result {
-      margin-top: 22px;
-      background: linear-gradient(90deg, #e0eafc 0%, #f4f8fb 100%);
-      border-radius: 12px;
-      padding: 18px 12px;
-      color: #1a2a3a;
-      font-size: 1.13rem;
+      margin-top: 28px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-radius: 18px;
+      padding: 24px 16px;
+      color: #2d3748;
+      font-size: 1.2rem;
       text-align: center;
-      box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+      box-shadow: 
+        0 4px 16px rgba(102, 126, 234, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      backdrop-filter: blur(10px);
+      animation: resultFadeIn 0.5s ease-out;
+      font-weight: 600;
+      line-height: 1.5;
     }
-    .footer {
-      margin-top: 22px;
-      text-align: center;
-      color: #7a8ca3;
-      font-size: 1.01rem;
-      letter-spacing: 0.1px;
+    @keyframes resultFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .result b {
+      color: #667eea;
+      font-weight: 700;
     }
     .container {
       box-shadow: 0 8px 32px rgba(44, 62, 80, 0.10);
@@ -91,8 +184,57 @@
       backdrop-filter: blur(2px);
     }
     ::placeholder {
-      color: #bfc9d1;
+      color: rgba(102, 126, 234, 0.6);
       opacity: 1;
+      font-style: italic;
+    }
+    
+    /* Стилизация селектора языка */
+    #langSelect {
+      padding: 8px 12px !important;
+      border-radius: 10px !important;
+      border: 2px solid rgba(102, 126, 234, 0.3) !important;
+      background: linear-gradient(145deg, #f8fafc, #ffffff) !important;
+      font-weight: 600 !important;
+      color: #4a5568 !important;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1) !important;
+      transition: all 0.3s ease !important;
+      margin-bottom: 0 !important;
+    }
+    #langSelect:hover {
+      border-color: rgba(102, 126, 234, 0.5) !important;
+      transform: translateY(-1px);
+    }
+    #langSelect:focus {
+      border-color: #667eea !important;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15) !important;
+    }
+    
+    /* Стилизация чекбокса */
+    input[type="checkbox"] {
+      width: 20px !important;
+      height: 20px !important;
+      margin-right: 10px !important;
+      margin-bottom: 0 !important;
+      accent-color: #667eea;
+      transform: scale(1.2);
+    }
+    
+    /* Анимация для контейнера чекбокса */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin: 16px 0;
+      padding: 12px;
+      background: rgba(102, 126, 234, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+      transition: all 0.3s ease;
+    }
+    .checkbox-container:hover {
+      background: rgba(102, 126, 234, 0.08);
+      border-color: rgba(102, 126, 234, 0.2);
+      transform: translateY(-1px);
     }
   </style>
 </head>
@@ -124,7 +266,7 @@
       <option value="1000000" data-en="Millions" data-ru="Миллионы" data-bg="Милиони" data-es="Millones">Millions</option>
     </select>
 
-    <div style="margin: 10px 0 0 0;">
+    <div style="margin: 10px 0 0 0; display: flex; align-items: center;" class="checkbox-container">
       <input type="checkbox" id="bonus30" style="margin-right:6px;">
       <label for="bonus30" id="labelBonus30">+30% EXP (Potion)</label>
     </div>
@@ -161,7 +303,7 @@
 
     const translations = {
       en: {
-        title: 'Level Up Time Calculator',
+        title: 'Level Up Time Calculator by Dima',
         current: 'Current level:',
         target: 'Target level:',
         expPerMin: 'EXP per minute:',
@@ -174,10 +316,9 @@
         sec: 'sec.',
         min: 'min.',
         hour: 'h.',
-        footer: 'Level data from cfg_Character_level.lua'
       },
       ru: {
-        title: 'Калькулятор времени прокачки уровня',
+        title: 'Калькулятор времени прокачки уровня by Dima',
         current: 'Текущий уровень:',
         target: 'Требуемый уровень:',
         expPerMin: 'Опыт в минуту:',
@@ -190,10 +331,9 @@
         sec: 'сек.',
         min: 'мин.',
         hour: 'ч.',
-        footer: 'Данные по опыту берутся из cfg_Character_level.lua'
       },
       bg: {
-        title: 'Калкулатор за време до ниво',
+        title: 'Калкулатор за време до ниво by Dima',
         current: 'Текущо ниво:',
         target: 'Желано ниво:',
         expPerMin: 'Опит на минута:',
@@ -206,10 +346,9 @@
         sec: 'сек.',
         min: 'мин.',
         hour: 'ч.',
-        footer: 'Данните са от cfg_Character_level.lua'
       },
       es: {
-        title: 'Calculadora de tiempo de subida de nivel',
+        title: 'Calculadora de tiempo de subida de nivel by Dima',
         current: 'Nivel actual:',
         target: 'Nivel objetivo:',
         expPerMin: 'EXP por minuto:',
@@ -222,7 +361,6 @@
         sec: 'seg.',
         min: 'min.',
         hour: 'h.',
-        footer: 'Datos de nivel de cfg_Character_level.lua'
       }
     };
 
@@ -234,7 +372,6 @@
       document.getElementById('labelExpPerMin').innerText = translations[lang].expPerMin;
       document.getElementById('labelUnit').innerText = translations[lang].unit;
       document.getElementById('calcBtn').innerText = translations[lang].btn;
-      document.querySelector('.footer').innerText = translations[lang].footer;
       document.getElementById('labelBonus30').innerText = {
         en: '+30% EXP (Event/Scroll)',
         ru: '+30% опыта (Событие/Свиток)',
@@ -268,7 +405,7 @@
 
     async function loadLevelData() {
       try {
-        const resp = await fetch('./Character_level.json');
+        const resp = await fetch('https://dmnobunaga.github.io/mucalc/Character_level.json');
         const data = await resp.json();
         levelExp = [0];
         for (let i = 0; i < data.length; i++) {
