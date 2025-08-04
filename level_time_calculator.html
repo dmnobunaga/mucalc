@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MU Immportal Level Up Time Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #e0eafc, #cfdef3);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 32px 28px 24px 28px;
+      max-width: 420px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #2d3a4b;
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin: 12px 0 4px 0;
+      color: #3a4a5d;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #bfc9d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4f8cff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .result {
+      margin-top: 18px;
+      background: #f4f8fb;
+      border-radius: 8px;
+      padding: 14px 10px;
+      color: #1a2a3a;
+      font-size: 1.08rem;
+      text-align: center;
+    }
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: #7a8ca3;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">Level Up Time Calculator by Dima</h1>
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+      <select id="langSelect" onchange="setLang(this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #bfc9d1;">
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+        <option value="bg">Български</option>
+        <option value="es">Español</option>
+      </select>
+    </div>
+    <h2 id="title"></h2>
+    <label for="currentLevel" id="labelCurrent"></label>
+    <input type="number" id="currentLevel" min="1" max="2000" value="1">
+
+    <label for="targetLevel" id="labelTarget"></label>
+    <input type="number" id="targetLevel" min="1" max="2000" value="10">
+
+    <label for="expPerMinute" id="labelExpPerMin"></label>
+    <input type="number" id="expPerMinute" min="1" value="1000">
+
+    <label for="unit" id="labelUnit"></label>
+    <select id="unit">
+      <option value="1" data-en="Normal" data-ru="Обычные" data-bg="Обычни" data-es="Normal">Normal</option>
+      <option value="1000" data-en="Thousands" data-ru="Тысячи" data-bg="Хиляди" data-es="Miles">Thousands</option>
+      <option value="1000000" data-en="Millions" data-ru="Миллионы" data-bg="Милиони" data-es="Millones">Millions</option>
+    </select>
+
+    <div style="margin: 10px 0 0 0;">
+      <input type="checkbox" id="bonus30" style="margin-right:6px;">
+      <label for="bonus30" id="labelBonus30">+30% EXP (Potion)</label>
+    </div>
+
+    <label for="emblem" id="labelEmblem" style="margin-top:10px;display:block;">VIP Emblem:</label>
+    <select id="emblem">
+      <option value="0" data-en="No Emblem" data-ru="Без эмблемы" data-bg="Без емблема" data-es="Sin emblema">No Emblem</option>
+      <option value="0.05" data-en="Bronze Emblem (1-5★) +5% EXP" data-ru="Бронзовая эмблема (1-5★) +5% опыта" data-bg="Бронзова емблема (1-5★) +5% опит" data-es="Emblema Bronce (1-5★) +5% EXP">Bronze Emblem (1-5★) +5% EXP</option>
+      <option value="0.10" data-en="Silver Emblem (1-5★) +10% EXP" data-ru="Серебряная эмблема (1-5★) +10% опыта" data-bg="Сребърна емблема (1-5★) +10% опит" data-es="Emblema Plata (1-5★) +10% EXP">Silver Emblem (1-5★) +10% EXP</option>
+      <option value="0.15" data-en="Gold Emblem (1-5★) +15% EXP" data-ru="Золотая эмблема (1-5★) +15% опыта" data-bg="Златна емблема (1-5★) +15% опит" data-es="Emblema Oro (1-5★) +15% EXP">Gold Emblem (1-5★) +15% EXP</option>
+      <option value="0.20" data-en="Platinum Emblem (1-5★) +20% EXP" data-ru="Платиновая эмблема (1-5★) +20% опыта" data-bg="Платинена емблема (1-5★) +20% опит" data-es="Emblema Platino (1-5★) +20% EXP">Platinum Emblem (1-5★) +20% EXP</option>
+      <option value="0.25" data-en="Diamond Emblem (1-5★) +25% EXP" data-ru="Бриллиантовая эмблема (1-5★) +25% опыта" data-bg="Диамантена емблема (1-5★) +25% опит" data-es="Emblema Diamante (1-5★) +25% EXP">Diamond Emblem (1-5★) +25% EXP</option>
+      <option value="0.30" data-en="Starshine Emblem (1-5★) +30% EXP" data-ru="Звёздная эмблема (1-5★) +30% опыта" data-bg="Звездна емблема (1-5★) +30% опит" data-es="Emblema Estrella (1-5★) +30% EXP">Starshine Emblem (1-5★) +30% EXP</option>
+      <option value="0.40" data-en="Monarch Emblem (1-5★) +40% EXP" data-ru="Монарх эмблема (1-5★) +40% опыта" data-bg="Монарх емблема (1-5★) +40% опит" data-es="Emblema Monarca (1-5★) +40% EXP">Monarch Emblem (1-5★) +40% EXP</option>
+      <option value="0.50" data-en="Glorious Emblem (1-5★) +50% EXP" data-ru="Славная эмблема (1-5★) +50% опыта" data-bg="Славна емблема (1-5★) +50% опит" data-es="Emblema Glorioso (1-5★) +50% EXP">Glorious Emblem (1-5★) +50% EXP</option>
+      <option value="0.60" data-en="Holy Emblem (1-5★) +60% EXP" data-ru="Святая эмблема (1-5★) +60% опыта" data-bg="Свята емблема (1-5★) +60% опит" data-es="Emblema Sagrado (1-5★) +60% EXP">Holy Emblem (1-5★) +60% EXP</option>
+      <option value="0.70" data-en="Eternal Emblem (1-30★) +70% EXP" data-ru="Вечная эмблема (1-30★) +70% опыта" data-bg="Вечна емблема (1-30★) +70% опит" data-es="Emblema Eterno (1-30★) +70% EXP">Eternal Emblem (1-30★) +70% EXP</option>
+      <option value="0.80" data-en="Radiant Emblem (1-30★) +80% EXP" data-ru="Сияющая эмблема (1-30★) +80% опыта" data-bg="Сияйна емблема (1-30★) +80% опит" data-es="Emblema Radiante (1-30★) +80% EXP">Radiant Emblem (1-30★) +80% EXP</option>
+      <option value="0.90" data-en="Bright Emblem (1-30★) +90% EXP" data-ru="Яркая эмблема (1-30★) +90% опыта" data-bg="Ярка емблема (1-30★) +90% опит" data-es="Emblema Brillante (1-30★) +90% EXP">Bright Emblem (1-30★) +90% EXP</option>
+      <option value="1.00" data-en="Supreme Emblem (1-30★) +100% EXP" data-ru="Верховная эмблема (1-30★) +100% опыта" data-bg="Върховна емблема (1-30★) +100% опит" data-es="Emblema Supremo (1-30★) +100% EXP">Supreme Emblem (1-30★) +100% EXP</option>
+      <option value="1.10" data-en="Transcendent Emblem (1-30★) +110% EXP" data-ru="Трансцендентная эмблема (1-30★) +110% опыта" data-bg="Трансцендентна емблема (1-30★) +110% опит" data-es="Emblema Trascendente (1-30★) +110% EXP">Transcendent Emblem (1-30★) +110% EXP</option>
+    </select>
+
+    <button id="calcBtn" onclick="calculateTime()"></button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+
+
+    let levelExp = [];
+    let levelLoaded = false;
+    let lang = 'en';
+
+    const translations = {
+      en: {
+        title: 'Level Up Time Calculator',
+        current: 'Current level:',
+        target: 'Target level:',
+        expPerMin: 'EXP per minute:',
+        unit: 'Unit:',
+        btn: 'Calculate',
+        error: 'Check your input.',
+        loading: 'Loading level data error!',
+        resultExp: 'Total EXP required:',
+        resultTime: 'Time required:',
+        sec: 'sec.',
+        min: 'min.',
+        hour: 'h.',
+        footer: 'Level data from cfg_Character_level.lua'
+      },
+      ru: {
+        title: 'Калькулятор времени прокачки уровня',
+        current: 'Текущий уровень:',
+        target: 'Требуемый уровень:',
+        expPerMin: 'Опыт в минуту:',
+        unit: 'Единица измерения:',
+        btn: 'Рассчитать',
+        error: 'Проверьте введённые данные.',
+        loading: 'Ошибка загрузки данных уровней!',
+        resultExp: 'Всего нужно опыта:',
+        resultTime: 'Времени потребуется:',
+        sec: 'сек.',
+        min: 'мин.',
+        hour: 'ч.',
+        footer: 'Данные по опыту берутся из cfg_Character_level.lua'
+      },
+      bg: {
+        title: 'Калкулатор за време до ниво',
+        current: 'Текущо ниво:',
+        target: 'Желано ниво:',
+        expPerMin: 'Опит на минута:',
+        unit: 'Единица:',
+        btn: 'Изчисли',
+        error: 'Проверете въведените данни.',
+        loading: 'Грешка при зареждане на нивата!',
+        resultExp: 'Общо нужен опит:',
+        resultTime: 'Нужно време:',
+        sec: 'сек.',
+        min: 'мин.',
+        hour: 'ч.',
+        footer: 'Данните са от cfg_Character_level.lua'
+      },
+      es: {
+        title: 'Calculadora de tiempo de subida de nivel',
+        current: 'Nivel actual:',
+        target: 'Nivel objetivo:',
+        expPerMin: 'EXP por minuto:',
+        unit: 'Unidad:',
+        btn: 'Calcular',
+        error: 'Verifique los datos ingresados.',
+        loading: '¡Error al cargar los datos de nivel!',
+        resultExp: 'EXP total requerida:',
+        resultTime: 'Tiempo requerido:',
+        sec: 'seg.',
+        min: 'min.',
+        hour: 'h.',
+        footer: 'Datos de nivel de cfg_Character_level.lua'
+      }
+    };
+
+    function setLang(l) {
+      lang = l;
+      document.getElementById('title').innerText = translations[lang].title;
+      document.getElementById('labelCurrent').innerText = translations[lang].current;
+      document.getElementById('labelTarget').innerText = translations[lang].target;
+      document.getElementById('labelExpPerMin').innerText = translations[lang].expPerMin;
+      document.getElementById('labelUnit').innerText = translations[lang].unit;
+      document.getElementById('calcBtn').innerText = translations[lang].btn;
+      document.querySelector('.footer').innerText = translations[lang].footer;
+      document.getElementById('labelBonus30').innerText = {
+        en: '+30% EXP (Event/Scroll)',
+        ru: '+30% опыта (Событие/Свиток)',
+        bg: '+30% опит (Събитие/Свитък)',
+        es: '+30% EXP (Evento/Pergamino)'
+      }[lang];
+      document.getElementById('labelEmblem').innerText = {
+        en: 'VIP Emblem:',
+        ru: 'VIP Эмблема:',
+        bg: 'VIP Емблема:',
+        es: 'Emblema VIP:'
+      }[lang];
+      // Обновить названия опций unit
+      const unitSel = document.getElementById('unit');
+      for (let i = 0; i < unitSel.options.length; i++) {
+        unitSel.options[i].text = unitSel.options[i].getAttribute('data-' + lang);
+      }
+      // Обновить названия опций эмблемы
+      const emblemSel = document.getElementById('emblem');
+      for (let i = 0; i < emblemSel.options.length; i++) {
+        emblemSel.options[i].text = emblemSel.options[i].getAttribute('data-' + lang);
+      }
+      // Пересчитать результат если уже был
+      if (levelLoaded) calculateTime();
+    }
+
+    window.onload = function() {
+      setLang('en');
+      document.getElementById('langSelect').value = 'en';
+    };
+
+    async function loadLevelData() {
+      try {
+        const resp = await fetch('./Character_level.json');
+        const data = await resp.json();
+        levelExp = [0];
+        for (let i = 0; i < data.length; i++) {
+          const lvl = data[i].level;
+          const exp = Number(data[i].exp);
+          levelExp[lvl] = exp;
+        }
+        levelLoaded = true;
+      } catch (e) {
+        document.getElementById('result').innerHTML = translations[lang].loading;
+      }
+    }
+
+    function sumExp(from, to) {
+      let sum = 0;
+      for (let i = from; i < to; i++) {
+        if (levelExp[i]) sum += Number(levelExp[i]);
+      }
+      return sum;
+    }
+
+    function formatTime(minutes) {
+      if (minutes < 1) return `${(minutes*60).toFixed(0)} ${translations[lang].sec}`;
+      const h = Math.floor(minutes/60);
+      const m = Math.round(minutes%60);
+      if (h > 0) return `${h} ${translations[lang].hour} ${m} ${translations[lang].min}`;
+      return `${m} ${translations[lang].min}`;
+    }
+
+    async function calculateTime() {
+      if (!levelLoaded) {
+        await loadLevelData();
+        if (!levelLoaded) return;
+      }
+      const current = parseInt(document.getElementById('currentLevel').value);
+      const target = parseInt(document.getElementById('targetLevel').value);
+      let expPerMin = parseFloat(document.getElementById('expPerMinute').value);
+      const unit = parseInt(document.getElementById('unit').value);
+      expPerMin *= unit;
+      // 30% бонус
+      if (document.getElementById('bonus30').checked) expPerMin *= 1.3;
+      // бонус эмблемы
+      const emblemBonus = parseFloat(document.getElementById('emblem').value);
+      if (!isNaN(emblemBonus) && emblemBonus > 0) expPerMin *= (1 + emblemBonus);
+      if (isNaN(current) || isNaN(target) || isNaN(expPerMin) || current < 1 || target <= current) {
+        document.getElementById('result').innerHTML = translations[lang].error;
+        return;
+      }
+      const totalExp = sumExp(current, target);
+      const minutes = totalExp / expPerMin;
+      document.getElementById('result').innerHTML =
+        `${translations[lang].resultExp} <b>${totalExp.toLocaleString('en-US')}</b><br>` +
+        `${translations[lang].resultTime} <b>${formatTime(minutes)}</b>`;
+    }
+  </script>
+</body>
+</html>
